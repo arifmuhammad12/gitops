@@ -1,3 +1,6 @@
 [submodule "01-ci-jenkins/shared-library"]
 	path = 01-ci-jenkins/shared-library
 	url = https://github.com/rezanaipospos/shared-library.git
+[submodule "apps/backend-go"]
+	path = apps/backend-go
+	url = https://github.com/rezanaipospos/backend-go.git
