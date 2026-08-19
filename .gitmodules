@@ -1,0 +1,3 @@
+[submodule "01-ci-jenkins/shared-library"]
+	path = 01-ci-jenkins/shared-library
+	url = https://github.com/rezanaipospos/shared-library.git
