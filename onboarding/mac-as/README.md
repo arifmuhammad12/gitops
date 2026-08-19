@@ -15,7 +15,7 @@
 Jalankan satu perintah ini, semua tool akan terinstall otomatis:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YourUsername/be-a-devops-course/main/course-project-local-machine/scripts/install-mac-as.sh | bash
+curl -fsSL https://raw.githubusercontent.com/rezanaipospos/01-cicd-local-track/main/scripts/install-mac-as.sh | bash
 ```
 
 > **Tidak aman menjalankan script dari internet tanpa melihat isinya?** Itu pemikiran yang bagus! Buka URL di atas di browser, baca dulu, lalu jalankan jika sudah yakin.

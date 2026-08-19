@@ -13,7 +13,7 @@
 ## Opsi A: One-liner (Direkomendasikan)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YourUsername/be-a-devops-course/main/course-project-local-machine/scripts/install-linux.sh | bash
+curl -fsSL https://raw.githubusercontent.com/rezanaipospos/01-cicd-local-track/main/scripts/install-linux.sh | bash
 ```
 
 ---
