@@ -1,0 +1,49 @@
+# .gitignore — 01-cicd-local-track (Local Machine Track)
+
+# ── Terraform ──────────────────────────────────────────────────
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfstate.d/
+.terraform.lock.hcl
+terraform.tfvars
+*.tfvars
+!*.tfvars.example
+
+# ── Ansible secrets ────────────────────────────────────────────
+*credentials.yml
+!*credentials.yml.example
+*vault_pass*
+*.vault
+
+# ── KinD / Kubernetes ──────────────────────────────────────────
+kubeconfig
+kubeconfig-*
+*.kubeconfig
+
+# ── Helm ───────────────────────────────────────────────────────
+charts/
+*.tgz
+
+# ── SSL/TLS ────────────────────────────────────────────────────
+*.pem
+*.key
+*.crt
+*.csr
+ssl/
+!ssl/.gitkeep
+
+# ── OS ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ── IDE ────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.iml
+
+# ── Logs ───────────────────────────────────────────────────────
+*.log
+logs/

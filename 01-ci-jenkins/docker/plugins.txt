@@ -1,0 +1,34 @@
+# Core Pipeline Plugins
+workflow-aggregator:latest
+pipeline-stage-view:latest
+pipeline-utility-steps:latest
+lockable-resources:latest
+build-timeout:latest
+timestamper:latest
+ansicolor:latest
+
+# SCM & Triggers
+git:latest
+github:latest
+github-branch-source:latest
+generic-webhook-trigger:latest
+
+# Credentials & Security
+credentials:latest
+credentials-binding:latest
+plain-credentials:latest
+ssh-credentials:latest
+ssh-agent:latest
+matrix-auth:latest
+role-strategy:latest
+
+# Docker Integration
+docker-workflow:latest
+docker-plugin:latest
+
+# Configuration as Code
+configuration-as-code:latest
+job-dsl:latest
+
+# Notifications
+slack:latest
