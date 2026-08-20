@@ -4,3 +4,6 @@
 [submodule "apps/backend-go"]
 	path = apps/backend-go
 	url = https://github.com/rezanaipospos/backend-go.git
+[submodule "03-gitops"]
+	path = 03-gitops
+	url = https://github.com/rezanaipospos/gitops.git
