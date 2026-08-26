@@ -1,42 +1,41 @@
+# ==========================================
+# Stage 1: Get Trivy binary directly from official multi-arch image
+# ==========================================
+FROM aquasec/trivy:0.59.1 AS trivy-source
+
+# ==========================================
+# Stage 2: Final Jenkins Image
+# ==========================================
 FROM jenkins/jenkins:lts-jdk21
 
 LABEL maintainer="Reza Naipospos <rezanaipospos@gmail.com>"
-LABEL description="Pre-configured Jenkins LTS Image for DevOps Engineering Course"
+LABEL description="Optimized Lightweight Jenkins LTS for DevOps Course"
 
-# Switch to root to install system tools & Docker CLI
 USER root
 
-# Install prerequisites & Docker CLI
+# Install minimal prerequisites, Docker CLI & KinD CLI
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    apt-transport-https \
     ca-certificates \
     curl \
     gnupg \
-    lsb-release \
     git \
-    wget \
     jq \
     && mkdir -p /etc/apt/keyrings \
     && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian bookworm stable" > /etc/apt/sources.list.d/docker.list \
     && apt-get update && apt-get install -y --no-install-recommends \
     docker-ce-cli \
     docker-compose-plugin \
     docker-buildx-plugin \
+    # Install KinD CLI (for KinD cluster image loading)
+    && curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v0.27.0/kind-linux-$(dpkg --print-architecture) \
+    && chmod +x /usr/local/bin/kind \
+    # Clean up APT caches
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Install KinD CLI (untuk load image ke KinD cluster via shared Docker socket)
-RUN curl -Lo /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v0.27.0/kind-linux-$(dpkg --print-architecture) \
-    && chmod +x /usr/local/bin/kind
-
-# Install Aqua Security Trivy for DevSecOps scanning
-RUN curl -fsSL https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor -o /etc/apt/keyrings/trivy.gpg \
-    && echo "deb [signed-by=/etc/apt/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" > /etc/apt/sources.list.d/trivy.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends trivy \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Copy Trivy static binary from Stage 1
+COPY --from=trivy-source /usr/local/bin/trivy /usr/local/bin/trivy
 
 # Give jenkins user access to docker socket
 RUN groupadd -f docker && usermod -aG docker jenkins
@@ -51,4 +50,5 @@ ENV CASC_JENKINS_CONFIG="/usr/share/jenkins/ref/jenkins.yaml"
 
 # Switch back to jenkins user and install plugins
 USER jenkins
-RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins.txt
+RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins.txt \
+    && rm -rf /tmp/* ~/.cache
