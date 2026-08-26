@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# install-mac-as.sh — One-liner Installer untuk Mac Apple Silicon (M1/M2/M3)
+# install-mac-as.sh — One-liner Installer untuk Mac (Apple Silicon & Intel)
 # Be A DevOps Employee: Local Machine Track
 #
 # Usage: curl -fsSL <url> | bash
@@ -21,22 +21,28 @@ log_ok()   { echo -e "  ${GREEN}✅ $1${NC}"; }
 log_skip() { echo -e "  ${YELLOW}⏭  $1 (sudah ada — skip)${NC}"; }
 log_fail() { echo -e "  ${RED}❌ ERROR: $1${NC}"; exit 1; }
 
-# ─── Cek OS ──────────────────────────────────────────────────────────────────
+# ─── Cek OS & Arsitektur ─────────────────────────────────────────────────────
 if [[ "$OSTYPE" != "darwin"* ]]; then
   log_fail "Script ini hanya untuk macOS. Gunakan install-linux.sh untuk Linux."
 fi
 
 ARCH=$(uname -m)
-if [ "$ARCH" != "arm64" ]; then
-  log_fail "Script ini untuk Apple Silicon (arm64). Arch Anda: $ARCH"
+if [ "$ARCH" = "arm64" ]; then
+  ARCH_NAME="Apple Silicon (arm64 - M1/M2/M3/M4)"
+  BREW_PREFIX="/opt/homebrew"
+elif [ "$ARCH" = "x86_64" ]; then
+  ARCH_NAME="Intel (x86_64)"
+  BREW_PREFIX="/usr/local"
+else
+  log_fail "Arsitektur tidak didukung: $ARCH (hanya mendukung arm64 dan x86_64)"
 fi
 
 echo ""
 echo -e "${BOLD}╔════════════════════════════════════════════════════╗${NC}"
-echo -e "${BOLD}║  Be A DevOps Employee — Mac Apple Silicon Installer ║${NC}"
+echo -e "${BOLD}║       Be A DevOps Employee — macOS Installer       ║${NC}"
 echo -e "${BOLD}╚════════════════════════════════════════════════════╝${NC}"
 echo ""
-echo -e "  Target: Mac Apple Silicon (arm64)"
+echo -e "  Target: Mac $ARCH_NAME"
 echo -e "  Tool yang akan diinstall: Homebrew, Docker Desktop, KinD, kubectl, Helm, Terraform"
 echo ""
 read -r -p "  Lanjutkan? (y/N): " confirm
@@ -51,9 +57,15 @@ else
   echo "  Menginstall Homebrew..."
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-  # Tambahkan ke PATH untuk Apple Silicon
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+  # Tambahkan ke PATH shell environment
+  if [ -f "$BREW_PREFIX/bin/brew" ]; then
+    SHELL_PROFILE="$HOME/.zprofile"
+    if [ "${SHELL:-}" = "*/bash" ] || [ -f "$HOME/.bash_profile" ] && [ ! -f "$HOME/.zprofile" ]; then
+      SHELL_PROFILE="$HOME/.bash_profile"
+    fi
+    echo "eval \"\$($BREW_PREFIX/bin/brew shellenv)\"" >> "$SHELL_PROFILE"
+    eval "$($BREW_PREFIX/bin/brew shellenv)"
+  fi
 
   log_ok "Homebrew terinstall"
 fi
