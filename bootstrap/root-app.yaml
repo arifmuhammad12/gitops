@@ -8,7 +8,7 @@ metadata:
 spec:
   project: course
   source:
-    repoURL: "https://github.com/rezanaipospos/gitops.git"  # <- GANTI
+    repoURL: "https://github.com/arifmuhammad12/gitops.git"  # <- GANTI
     targetRevision: HEAD
     path: bootstrap/apps  # folder berisi child Application YAMLs
   destination:

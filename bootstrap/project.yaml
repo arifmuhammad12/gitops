@@ -8,7 +8,7 @@ spec:
   description: "Be A DevOps Employee course project"
   # Repo yang boleh dipakai sebagai source
   sourceRepos:
-    - "https://github.com/rezanaipospos/gitops.git"  # <- GANTI dengan repo GitOps kamu
+    - "https://github.com/arifmuhammad12/gitops.git"  # <- GANTI dengan repo GitOps kamu
   # Cluster + namespace yang boleh di-deploy
   destinations:
     - namespace: "*"
