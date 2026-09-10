@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: rezanaipospos/backend-go:10
+        image: rezanaipospos/backend-go:11
         resources:
           requests:
             cpu: 50m
