@@ -1,4 +1,4 @@
-docker# PDB patch — development (allow full disruption)
+#PDB patch — development (allow full disruption)
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
